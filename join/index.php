@@ -1,3 +1,29 @@
+<?php
+
+$error = array();
+
+if (isset($_POST) && !empty($_POST)) {
+  // 必須チェック
+  if ($_POST['nick_name'] == '') {
+    $error['nick_name'] = 'blank';
+  }
+  if ($_POST['email'] == '') {
+    $error['email'] = 'blank';
+  }
+  if ($_POST['password'] == '') {
+    $error['password'] = 'blank';
+  }
+  if (strlen($_POST['password']) < 4) {
+    $error['password'] = 'length';
+  }
+
+  if (empty($error)) {
+    // エラーがなかったら処理する
+  }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -36,7 +62,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.html"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
+              <a class="navbar-brand" href="index.php"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
