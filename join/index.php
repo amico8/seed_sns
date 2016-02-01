@@ -97,7 +97,14 @@ if (isset($_POST) && !empty($_POST)) {
           <div class="form-group">
             <label class="col-sm-4 control-label">メールアドレス</label>
             <div class="col-sm-8">
-              <input type="email" name="email" class="form-control" placeholder="例： seed@nex.com">
+            <?php if (isset($_POST['email'])) {
+              echo sprintf('<input type="email" name="email" class="form-control" placeholder="例： seed@nex.com" value="%s">', htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
+            } else {
+              echo '<input type="email" name="email" class="form-control" placeholder="例： seed@nex.com" value="">';
+            }  ?>
+              <?php if(isset($error['email']) && $error['email'] == 'blank'): ?>
+              <p class="error">* メールアドレスを入力してください。</p>
+              <?php endif; ?>
             </div>
           </div>
           <!-- パスワード -->
