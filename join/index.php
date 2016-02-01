@@ -119,6 +119,9 @@ if (isset($_POST) && !empty($_POST)) {
               <?php if(isset($error['password']) && $error['password'] == 'blank'): ?>
               <p class="error">* パスワードを入力してください。</p>
               <?php endif; ?>
+              <?php if(isset($error['password']) && $error['password'] == 'length'): ?>
+              <p class="error">* パスワードは4文字以上で入力してください。</p>
+              <?php endif; ?>
             </div>
           </div>
           <!-- プロフィール写真 -->
