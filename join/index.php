@@ -12,8 +12,7 @@ if (isset($_POST) && !empty($_POST)) {
   }
   if ($_POST['password'] == '') {
     $error['password'] = 'blank';
-  }
-  if (strlen($_POST['password']) < 4) {
+  }else if (strlen($_POST['password']) < 4) {
     $error['password'] = 'length';
   }
 
@@ -111,7 +110,15 @@ if (isset($_POST) && !empty($_POST)) {
           <div class="form-group">
             <label class="col-sm-4 control-label">パスワード</label>
             <div class="col-sm-8">
-              <input type="password" name="password" class="form-control" placeholder="">
+            <?php if (isset($_POST['password'])) {
+              echo sprintf('<input type="password" name="password" class="form-control" placeholder="" value="%s">',
+               htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+            } else {
+              echo '<input type="password" name="password" class="form-control" placeholder="" value="">';
+            }?>
+              <?php if(isset($error['password']) && $error['password'] == 'blank'): ?>
+              <p class="error">* パスワードを入力してください。</p>
+              <?php endif; ?>
             </div>
           </div>
           <!-- プロフィール写真 -->
