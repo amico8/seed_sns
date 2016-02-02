@@ -16,6 +16,15 @@ if (isset($_POST) && !empty($_POST)) {
     $error['password'] = 'length';
   }
 
+  $fileName = $_FILES['picture_path']['name'];
+  if (!empty($fileName)) {
+    $ext = substr($fileName, -3);
+    if ($ext != 'jpg' && $ext != 'gif') {
+      $error['picture_path'] = 'type';
+    }
+  }
+
+
   if (empty($error)) {
     // エラーがなかったら処理する
   }
@@ -77,7 +86,7 @@ if (isset($_POST) && !empty($_POST)) {
     <div class="row">
       <div class="col-md-6 col-md-offset-3 content-margin-top">
         <legend>会員登録</legend>
-        <form method="post" action="" class="form-horizontal" role="form">
+        <form method="post" action="" class="form-horizontal" role="form" enctype="multipart/form-data">
           <!-- ニックネーム -->
           <div class="form-group">
             <label class="col-sm-4 control-label">ニックネーム</label>
