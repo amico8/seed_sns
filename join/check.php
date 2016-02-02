@@ -1,3 +1,7 @@
+<?php
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -36,7 +40,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.html"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
+              <a class="navbar-brand" href="index.php"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -59,19 +63,24 @@
                 <!-- 登録内容を表示 -->
                 <tr>
                   <td><div class="text-center">ニックネーム</div></td>
-                  <td><div class="text-center">Seed kun</div></td>
+                  <td><div class="text-center"><?php echo htmlspecialchars($_SESSION['join']['nick_name'], ENT_QUOTES, 'UTF-8'); ?></div></td>
                 </tr>
                 <tr>
                   <td><div class="text-center">メールアドレス</div></td>
-                  <td><div class="text-center">seed@nex.com</div></td>
+                  <td><div class="text-center"><?php echo htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES, 'UTF-8'); ?></div></td>
                 </tr>
                 <tr>
                   <td><div class="text-center">パスワード</div></td>
-                  <td><div class="text-center">●●●●●●●●</div></td>
+                  <td><div class="text-center">【表示されません】</div></td>
                 </tr>
                 <tr>
                   <td><div class="text-center">プロフィール画像</div></td>
-                  <td><div class="text-center"><img src="http://c85c7a.medialib.glogster.com/taniaarca/media/71/71c8671f98761a43f6f50a282e20f0b82bdb1f8c/blog-images-1349202732-fondo-steve-jobs-ipad.jpg" width="100" height="100"></div></td>
+                  <td>
+                    <div class="text-center">
+                     <?php echo sprintf('<img src="../member_picture/%s" width="100" height="100">',
+                      htmlspecialchars($_SESSION['join']['picture_path'], ENT_QUOTES, 'UTF-8')); ?>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
