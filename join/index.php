@@ -1,4 +1,7 @@
 <?php
+// セッションの初期化
+// セッションを使うページではすべてにこの記述を入れる
+session_start();
 
 $error = array();
 
@@ -27,7 +30,15 @@ if (isset($_POST) && !empty($_POST)) {
   if (empty($error)) {
     // エラーがなかったら処理する
     $picture_path = date('YmdHis') . $fileName;
-    move_uploaded_file($_FILES['picture_path']['tmp_name'], '../member_picture/' . $fileName);
+    move_uploaded_file($_FILES['picture_path']['tmp_name'], '../member_picture/' . $picture_path);
+
+    $_SESSION['join'] = $_POST;
+    $_SESSION['join']['picture_path'] = $picture_path;
+
+    // check.phpへ遷移
+    header('Location: check.php');
+    // これより以下のコードを処理しないようにexit()で抜ける
+    exit();
   }
 
 }
