@@ -27,7 +27,7 @@ if (isset($_POST) && !empty($_POST)) {
   if (empty($error)) {
     // エラーがなかったら処理する
     $picture_path = date('YmdHis') . $fileName;
-    move_uploaded_file($_FILES['picture_path']['temp_name'], '../member_picture/' . $fileName);
+    move_uploaded_file($_FILES['picture_path']['tmp_name'], '../member_picture/' . $fileName);
   }
 
 }
@@ -141,6 +141,9 @@ if (isset($_POST) && !empty($_POST)) {
               <input type="file" name="picture_path" class="form-control">
               <?php if (isset($error['picture_path']) && $error['picture_path'] == 'type'): ?>
                 <p class="error">* 写真などは「.gif」「.jpg」の画像を指定してください。</p>
+              <?php endif; ?>
+              <?php if(!empty($error)): ?>
+                <p class="error">* 恐れ入りますが、画像を改めて指定してください。</p>
               <?php endif; ?>
             </div>
           </div>
