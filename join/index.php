@@ -24,9 +24,10 @@ if (isset($_POST) && !empty($_POST)) {
     }
   }
 
-
   if (empty($error)) {
     // エラーがなかったら処理する
+    $picture_path = date('YmdHis') . $fileName;
+    move_uploaded_file($_FILES['picture_path']['temp_name'], '../member_picture/' . $fileName);
   }
 
 }
