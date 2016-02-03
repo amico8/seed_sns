@@ -3,6 +3,8 @@
 // セッションを使うページではすべてにこの記述を入れる
 session_start();
 
+require('../dbconnect.php');
+
 $error = array();
 
 if (isset($_POST) && !empty($_POST)) {
@@ -24,6 +26,18 @@ if (isset($_POST) && !empty($_POST)) {
     $ext = substr($fileName, -3);
     if ($ext != 'jpg' && $ext != 'gif') {
       $error['picture_path'] = 'type';
+    }
+  }
+
+  // 重複チェック処理
+  if (empty($error)) {
+    $sql = sprintf('SELECT COUNT(*) AS cnt FROM `members` WHERE `email` = "%s"', mysqli_real_escape_string($db, $_POST['email']));
+
+    $record = mysqli_query($db, $sql) or die(mysqli_error());
+    // 連想配列としてSQL実行結果を受け取る
+    $table = mysqli_fetch_assoc($record);
+    if ($table['cnt'] > 0) {
+      $error['email'] = 'duplicate';
     }
   }
 
@@ -127,6 +141,9 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'rewrite') {
             }  ?>
               <?php if(isset($error['email']) && $error['email'] == 'blank'): ?>
               <p class="error">* メールアドレスを入力してください。</p>
+              <?php endif; ?>
+              <?php if(isset($error['email']) && $error['email'] == 'duplicate'): ?>
+              <p class="error">* 指定されたメールアドレスはすでに登録されています。</p>
               <?php endif; ?>
             </div>
           </div>
