@@ -8,14 +8,11 @@
     <title>SeedSNS</title>
 
     <!-- Bootstrap -->
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="../assets/css/form.css" rel="stylesheet">
-    <link href="../assets/css/timeline.css" rel="stylesheet">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <!--
-      designフォルダ内では2つパスの位置を戻ってからcssにアクセスしていることに注意！
-     -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/form.css" rel="stylesheet">
+    <link href="assets/css/timeline.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -50,12 +47,31 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 content-margin-top">
-        <div class="well">
-          ご登録ありがとうございます。 <br>
-          下記ボタンよりログインして下さい。
-        </div>
-        <a href="../login.php" class="btn btn-default">ログイン</a>
+      <div class="col-md-6 col-md-offset-3 content-margin-top">
+        <legend>ログイン</legend>
+        <form method="post" action="" class="form-horizontal" role="form">
+          <!-- メールアドレス -->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">メールアドレス</label>
+            <div class="col-sm-8">
+              <input type="email" name="email" class="form-control" placeholder="例： seed@nex.com">
+            </div>
+          </div>
+          <!-- パスワード -->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">パスワード</label>
+            <div class="col-sm-8">
+              <input type="password" name="password" class="form-control" placeholder="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">自動ログイン</label>
+            <div class="col-sm-8">
+              <input type="checkbox" id="save" name="save" value="on">
+            </div>
+          </div>
+          <input type="submit" class="btn btn-info" value="ログイン"> | <a href="join/" class="btn btn-default">&raquo;会員登録</a>
+        </form>
       </div>
     </div>
   </div>
@@ -65,4 +81,3 @@
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
-
