@@ -40,12 +40,10 @@ if (isset($_POST) && !empty($_POST)) {
     // これより以下のコードを処理しないようにexit()で抜ける
     exit();
   }
-
-  // 書き直し
-  if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'rewrite') {
-    $_POST = $_SESSION['join'];
-  }
-
+}
+// 書き直し
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'rewrite') {
+  $_POST = $_SESSION['join'];
 }
 
 ?>
