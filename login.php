@@ -2,14 +2,40 @@
 require('dbconnect.php');
 session_start();
 
+// 自動ログイン処理
+if (isset($_COOKIE['email']) && $_COOKIE['email'] != '') {
+  $_POST['email'] = $_COOKIE['email'];
+  $_POST['password'] = $_COOKIE['password'];
+  $_POST['save'] = 'on';
+}
+
 if (isset($_POST) && !empty($_POST)) {
-  if ($_POST['email'] != '' &&$_POST['password'] != '') {
+  if ($_POST['email'] != '' && $_POST['password'] != '') {
     // ログイン処理
-    $sql = sprintf('SELECT * FROM `members` WHERE `email` = "%S" AND `password` = "%s"',
+    $sql = sprintf('SELECT * FROM `members` WHERE `email` = "%s" AND `password` = "%s"',
     mysqli_real_escape_string($db, $_POST['email']),
-    mysqli_real_escape_string($db, $_POST['password']));
+    mysqli_real_escape_string($db, sha1($_POST['password'])));
+    echo $sql;
     // SQL実行
     $record = mysqli_query($db, $sql) or die(mysqli_error());
+
+    if($table = mysqli_fetch_assoc($record)){
+
+      $_SESSION['member_id'] = $table['member_id'];
+      $_SESSION['time'] = time();
+
+      // 自動ログインのチェックボックスにチェックがあったら、ログイン情報をCookieに保存する
+      if ($_POST['save'] == 'on') {
+        setcookie('email', $_POST['email'], time() + 60*60*24*14);
+        setcookie('password', $_POST['password'], time() + 60*60*24*14);
+      }
+
+      header('Location: index.php');
+      exit();
+
+    } else {
+      $error['login'] = 'failed';
+    }
 
   } else {
     // エラー
@@ -82,6 +108,9 @@ if (isset($_POST) && !empty($_POST)) {
               } ?>
               <?php if(isset($error['login']) && $error['login'] == 'blank'): ?>
                 <p class="error">* メールアドレスとパスワードをご記入ください。</p>
+              <?php endif; ?>
+              <?php if(isset($error['login']) && $error['login'] == 'failed'): ?>
+                <p class="error">* ログインに失敗しました。正しくご記入ください。</p>
               <?php endif; ?>
             </div>
           </div>
