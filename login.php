@@ -1,8 +1,15 @@
 <?php
+require('dbconnect.php');
+session_start();
 
 if (isset($_POST) && !empty($_POST)) {
   if ($_POST['email'] != '' &&$_POST['password'] != '') {
     // ログイン処理
+    $sql = sprintf('SELECT * FROM `members` WHERE `email` = "%S" AND `password` = "%s"',
+    mysqli_real_escape_string($db, $_POST['email']),
+    mysqli_real_escape_string($db, $_POST['password']));
+    // SQL実行
+    $record = mysqli_query($db, $sql) or die(mysqli_error());
 
   } else {
     // エラー
