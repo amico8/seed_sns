@@ -7,7 +7,17 @@ require('dbconnect.php');
 // ・セッションにmember_idが入っている
 // ・最後の行動から1時間以内である
 if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
-  
+  // セッションの時間を更新
+  $_SESSION['time'] = time();
+
+$sql = sprintf('SELECT * FROM `members` WHERE `member_id`=%d',
+  mysqli_real_escape_string($db, $_SESSION['member_id']));
+
+$record = mysqli_query($db, $sql) or die (mysqli_error());
+
+$member = mysqli_fetch_assoc($record);
+
+
 } else {
   header('Location: login.php');
   exit();
@@ -65,7 +75,7 @@ if (isset($_SESSION['member_id']) && $_SESSION['time'] + 3600 > time()) {
   <div class="container">
     <div class="row">
       <div class="col-md-4 content-margin-top">
-        <legend>ようこそ●●さん！</legend>
+        <legend>ようこそ <?php echo htmlspecialchars($member['nick_name'], ENT_QUOTES, 'UTF-8'); ?>さん！</legend>
         <form method="post" action="" class="form-horizontal" role="form">
             <!-- つぶやき -->
             <div class="form-group">
