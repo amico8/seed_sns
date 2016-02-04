@@ -14,13 +14,26 @@ $sql = sprintf('SELECT * FROM `members` WHERE `member_id`=%d',
   mysqli_real_escape_string($db, $_SESSION['member_id']));
 
 $record = mysqli_query($db, $sql) or die (mysqli_error());
-
 $member = mysqli_fetch_assoc($record);
-
 
 } else {
   header('Location: login.php');
   exit();
+}
+
+// 「つぶやく」ボタンをクリックした時
+if (!empty($_POST)) {
+  if ($_POST['tweet'] != '') {
+    $sql = sprintf('INSERT INTO `tweets`SET `tweet`="%s", `member_id`=%d, `created`= now()',
+      mysqli_real_escape_string($db, $_POST['tweet']),
+      mysqli_real_escape_string($db, $member['member_id']));
+
+    mysqli_query($db, $sql) or die(mysqli_error());
+
+    // リロードの重複登録を防ぐため
+    header('Location: index.php');
+    exit();
+  }
 }
 
 ?>
