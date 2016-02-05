@@ -37,8 +37,8 @@ if (!empty($_POST)) {
 }
 
 // 投稿内容を取得する
-$sql = sprintf(SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id ORDER BY t.created DESC);
-
+$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id ORDER BY t.created DESC');
+$tweets = mysqli_query($db, $sql) or die(mysqli_error($db));
 
 ?>
 <!DOCTYPE html>
@@ -112,21 +112,24 @@ $sql = sprintf(SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members
       </div>
 
       <div class="col-md-8 content-margin-top">
-        <!-- ここでつぶやいた内容を繰り返し表示sる -->
+        <!-- ここでつぶやいた内容を繰り返し表示する -->
+        <?php while ($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
-          <img src="" width="48" height="48">
+          <img src="member_picture/<?php echo htmlspecialchars($tweet['picture_path'], ENT_QUOTES, 'UTF-8'); ?>" width="48" height="48">
           <p>
-            つぶやき１<span class="name"> (Seed kun) </span>
+            <?php echo htmlspecialchars($tweet['tweet'], ENT_QUOTES, 'UTF-8'); ?>
+            <span class="name"> (<?php echo htmlspecialchars($tweet['nick_name'], ENT_QUOTES, 'UTF-8'); ?>) </span>
             [<a href="#">Re</a>]
           </p>
           <p class="day">
             <a href="view.php">
-              2016-01-28 18:01
+              <?php echo htmlspecialchars($tweet['created'], ENT_QUOTES, 'UTF-8'); ?>
             </a>
             [<a href="#" style="color: #00994C;">編集</a>]
             [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
+      <?php endwhile; ?>
       </div>
 
     </div>
