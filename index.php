@@ -141,6 +141,9 @@ if (isset($_REQUEST['res'])) {
             <a href="view.php?tweet_id=<?php echo htmlspecialchars($tweet['tweet_id'], ENT_QUOTES, 'UTF-8'); ?>">
               <?php echo htmlspecialchars($tweet['created'], ENT_QUOTES, 'UTF-8'); ?>
             </a>
+            <?php if($tweet['reply_tweet_id'] > 0): ?>
+              <a href="view.php?tweet_id=<?php echo htmlspecialchars($tweet['tweet_id'], ENT_QUOTES, 'UTF-8'); ?>"> | 返信元のつぶやき</a>
+            <?php endif; ?>
             [<a href="#" style="color: #00994C;">編集</a>]
             [<a href="#" style="color: #F33;">削除</a>]
           </p>
