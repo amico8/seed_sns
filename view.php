@@ -1,3 +1,19 @@
+<?php
+session_start();
+require('dbconnect.php');
+
+// tweet_idがパラメータになかったら
+if (empty($_REQUEST['tweet_id'])) {
+  header('Location: index.php');
+  exit();
+}
+
+$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id AND t.tweet_id = %d ORDER BY t.created DESC',
+  mysqli_real_escape_string($db, $_REQUEST['tweet_id'])
+);
+$record = mysqli_query($db, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -49,18 +65,22 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4 col-md-offset-4 content-margin-top">
+      <?php if($tweet = mysqli_fetch_assoc($record)): ?>
         <div class="msg">
-          <img src="http://c85c7a.medialib.glogster.com/taniaarca/media/71/71c8671f98761a43f6f50a282e20f0b82bdb1f8c/blog-images-1349202732-fondo-steve-jobs-ipad.jpg" width="100" height="100">
-          <p>投稿者 : <span class="name"> Seed kun </span></p>
+          <img src="member_picture/<?php echo htmlspecialchars($tweet['picture_path'], ENT_QUOTES, 'UTF-8') ?>" width="100" height="100">
+          <p>投稿者 : <span class="name"><?php echo htmlspecialchars($tweet['nick_name'], ENT_QUOTES, 'UTF-8'); ?></span></p>
           <p>
             つぶやき : <br>
-            つぶやき４つぶやき４つぶやき４
+            <?php echo htmlspecialchars($tweet['tweet'], ENT_QUOTES, 'UTF-8') ?>
           </p>
           <p class="day">
-            2016-01-28 18:04
+            <?php echo htmlspecialchars($tweet['created'], ENT_QUOTES, 'UTF-8') ?>
             [<a href="#" style="color: #F33;">削除</a>]
           </p>
         </div>
+      <?php else: ?>
+        <p>その投稿は削除されたか、URLが間違っています。</p>
+      <?php endif; ?>
         <a href="index.php">&laquo;&nbsp;一覧へ戻る</a>
       </div>
     </div>
