@@ -40,6 +40,15 @@ if (!empty($_POST)) {
 $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id ORDER BY t.created DESC');
 $tweets = mysqli_query($db, $sql) or die(mysqli_error($db));
 
+if (isset($_REQUEST['res'])) {
+  // 取ってきたい内容は、ニックネームとつぶやき内容
+  $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id AND t.tweet_id = %d ORDER BY t.created DESC',
+    mysqli_real_escape_string($db, $_REQUEST['res'])
+  );
+  $record = mysqli_query($db, $sql);
+  $table = mysqli_fetch_assoc($record);
+  $tweet = '>> @'.$table['nick_name'].' '.$table['tweet'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -98,7 +107,11 @@ $tweets = mysqli_query($db, $sql) or die(mysqli_error($db));
             <div class="form-group">
               <label class="col-sm-4 control-label">つぶやき</label>
               <div class="col-sm-8">
+              <?php if(isset($tweet)): ?>
+                <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"><?php echo $tweet; ?></textarea>
+              <?php else: ?>
                 <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"></textarea>
+              <?php endif; ?>
               </div>
             </div>
           <ul class="paging">
@@ -119,7 +132,7 @@ $tweets = mysqli_query($db, $sql) or die(mysqli_error($db));
           <p>
             <?php echo htmlspecialchars($tweet['tweet'], ENT_QUOTES, 'UTF-8'); ?>
             <span class="name"> (<?php echo htmlspecialchars($tweet['nick_name'], ENT_QUOTES, 'UTF-8'); ?>) </span>
-            [<a href="#">Re</a>]
+            [<a href="index.php?res=<?php echo htmlspecialchars($tweet['tweet_id'], ENT_QUOTES, 'UTF-8'); ?>">Re</a>]
           </p>
           <p class="day">
             <a href="view.php">
