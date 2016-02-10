@@ -62,8 +62,16 @@ if($page == ''){
 // ①表示する正しいページの数値（Min）を設定
 $page = max($page, 1);
 
+// あいまい検索処理
+if (isset($_GET['search_word']) && !empty($_GET['search_wrod'])) {
+  $sql = sprintf('SELECT COUNT(*) AS cnt FROM `tweets` WHERE `tweet` LIKE "%%%s%%"',
+    mysqli_real_escape_string($db, $_GET['search_word'])
+  );
+} else {
+  $sql = sprintf('SELECT COUNT(*) AS cnt FROM `tweets`');
+}
+
 // ②必要なページ数を計算する
-$sql = sprintf('SELECT COUNT(*) AS cnt FROM `tweets`');
 $recordSet = mysqli_query($db, $sql) or die(mysqli_error($db));
 $table = mysqli_fetch_Assoc($recordSet);
 
@@ -77,9 +85,16 @@ $page = min($page, $maxPage);
 $start = ($page -1) * 5;
 $start = max(0, $start);
 
-// 投稿内容を取得する
-$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id ORDER BY t.created DESC LIMIT %d, 5',
-  $start);
+if (isset($_GET['search_word']) && !empty($_GET['search_word'])) {
+  $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id AND t.tweet LIKE "%%%s%%" ORDER BY t.created DESC LIMIT %d, 5',
+    mysqli_real_escape_string($db, $_GET['search_word']),
+    $start);
+} else {
+  // 投稿内容を取得する
+  $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id ORDER BY t.created DESC LIMIT %d, 5',
+    $start);
+}
+
 $tweets = mysqli_query($db, $sql) or die(mysqli_error($db));
 
 if (isset($_REQUEST['res'])) {
@@ -172,14 +187,20 @@ if (isset($_REQUEST['res'])) {
         <?php endif; ?>
         <input type="submit" class="btn btn-success btn-xs" value="検索">
         &nbsp;&nbsp;&nbsp;&nbsp;
+        <?php
+        $word ='';
+        if (isset($_GET['search_word'])) {
+          $word = '&search_word=' . $_GET['search_word'];
+        }
+        ?>
         <?php if($page > 1): ?>
-          <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
+          <li><a href="index.php?page=<?php print($page-1); ?><?php print $word; ?>" class="btn btn-default">前</a></li>
         <?php else: ?>
           <li>前</li>
         <?php endif; ?>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <?php if($page < $maxPage): ?>
-          <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
+          <li><a href="index.php?page=<?php print($page+1); ?><?php print $word; ?>" class="btn btn-default">次</a></li>
         <?php else: ?>
           <li>次</li>
         <?php endif; ?>
