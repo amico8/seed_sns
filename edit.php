@@ -1,19 +1,3 @@
-<?php
-session_start();
-require('dbconnect.php');
-
-// tweet_idがパラメータになかったら
-if (empty($_REQUEST['tweet_id'])) {
-  header('Location: index.php');
-  exit();
-}
-
-$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id AND t.tweet_id = %d ORDER BY t.created DESC',
-  mysqli_real_escape_string($db, $_REQUEST['tweet_id'])
-);
-$record = mysqli_query($db, $sql);
-
-?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -49,12 +33,11 @@ $record = mysqli_query($db, $sql);
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.php"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
+              <a class="navbar-brand" href="index.html"><span class="strong-title"><i class="fa fa-twitter-square"></i> Seed SNS</span></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="logout.php">ログアウト</a></li>
               </ul>
           </div>
           <!-- /.navbar-collapse -->
@@ -64,24 +47,24 @@ $record = mysqli_query($db, $sql);
 
   <div class="container">
     <div class="row">
-      <div class="col-md-4 col-md-offset-4 content-margin-top">
-      <?php if($tweet = mysqli_fetch_assoc($record)): ?>
+      <div class="col-md-8 col-md-offset-2 content-margin-top">
         <div class="msg">
-          <img src="member_picture/<?php echo htmlspecialchars($tweet['picture_path'], ENT_QUOTES, 'UTF-8') ?>" width="100" height="100">
-          <p>投稿者 : <span class="name"><?php echo htmlspecialchars($tweet['nick_name'], ENT_QUOTES, 'UTF-8'); ?></span></p>
-          <p>
-            つぶやき : <br>
-            <?php echo htmlspecialchars($tweet['tweet'], ENT_QUOTES, 'UTF-8') ?>
-          </p>
-          <p class="day">
-            <?php echo htmlspecialchars($tweet['created'], ENT_QUOTES, 'UTF-8') ?>
-            [<a href="#" style="color: #F33;">削除</a>]
-          </p>
+          <form method="post" action="" class="form-horizontal" role="form">
+            <img src="member_picture/xxx.jpg; ?>" width="120" height="120">
+            <p>投稿者 : <span class="name"> Seed kun </span></p>
+            <p>
+              つぶやき : <br>
+              <textarea name="tweet" cols="50" rows="2">ほげほげほげ</textarea>
+            </p>
+            <p class="day">
+              2016/01/01 00:00:00
+              <input type="submit" value="編集">
+              [<a href="#" style="color: #F33;">削除</a>]
+            </p>
+          </form>
         </div>
-      <?php else: ?>
-        <p>その投稿は削除されたか、URLが間違っています。</p>
-      <?php endif; ?>
         <a href="index.php">&laquo;&nbsp;一覧へ戻る</a>
+        <p>そのページは存在しないかURLが間違っています。
       </div>
     </div>
   </div>

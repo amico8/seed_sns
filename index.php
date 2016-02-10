@@ -132,7 +132,7 @@ if (isset($_REQUEST['res'])) {
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="logout.html">ログアウト</a></li>
+                <li><a href="logout.php">ログアウト</a></li>
               </ul>
           </div>
           <!-- /.navbar-collapse -->
@@ -192,7 +192,9 @@ if (isset($_REQUEST['res'])) {
             <?php if($tweet['reply_tweet_id'] > 0): ?>
               <a href="view.php?tweet_id=<?php echo h($tweet['reply_tweet_id']); ?>"> | 返信元のつぶやき</a>
             <?php endif; ?>
+            <?php if($tweet['member_id'] == $_SESSION['member_id']): ?>
             [<a href="#" style="color: #00994C;">編集</a>]
+          <?php endif; ?>
             <?php if($member['member_id'] == $tweet['member_id']): ?>
             [<a href="delete.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>" style="color: #F33;">削除</a>]
           <?php endif; ?>
