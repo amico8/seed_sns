@@ -19,6 +19,20 @@ $sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `member
 );
 $record = mysqli_query($db, $sql);
 
+// 編集ボタンクリック時、DBにつぶやき内容を更新
+if (isset($_POST) && !empty($_POST)) {
+  if ($_POST['tweet'] != '') {
+    $sql = sprintf('UPDATE `tweets` SET `tweet`="%s" WHERE `tweet_id` = %d',
+      mysqli_real_escape_string($db, $_POST['tweet']),
+      mysqli_real_escape_string($db, $_REQUEST['tweet_id'])
+    );
+    mysqli_query($db, $sql) or die(mysqli_error($db));
+
+    header('Location: index.php');
+    exit();
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -82,7 +96,6 @@ $record = mysqli_query($db, $sql);
             <p class="day">
               <?php echo h($tweet['created']); ?>
               <input type="submit" value="編集">
-              [<a href="#" style="color: #F33;">削除</a>]
             </p>
           </form>
         </div>
