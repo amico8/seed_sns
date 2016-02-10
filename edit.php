@@ -1,3 +1,25 @@
+<?php
+session_start();
+require('dbconnect.php');
+
+// 引数で渡した値をhtmlspecialcharsで変換してくれる関数
+function h($value){
+  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
+// tweet_idがパラメータになかったらindex.phpを表示する
+if (empty($_REQUEST['tweet_id'])) {
+  header('Location: index.php');
+  exit();
+}
+
+// 指定したtweet_idの内容を取得
+$sql = sprintf('SELECT m.nick_name, m.picture_path, t.* FROM `tweets` t, `members` m WHERE t.member_id = m.member_id AND t.tweet_id = %d ORDER BY t.created DESC',
+  mysqli_real_escape_string($db, $_REQUEST['tweet_id'])
+);
+$record = mysqli_query($db, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -48,23 +70,26 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 col-md-offset-2 content-margin-top">
+      <?php if($tweet = mysqli_fetch_assoc($record)): ?>
         <div class="msg">
           <form method="post" action="" class="form-horizontal" role="form">
-            <img src="member_picture/xxx.jpg; ?>" width="120" height="120">
-            <p>投稿者 : <span class="name"> Seed kun </span></p>
+            <img src="member_picture/<?php echo h($tweet['picture_path']); ?>; ?>" width="120" height="120">
+            <p>投稿者 : <span class="name"><?php echo h($tweet['nick_name']); ?></span></p>
             <p>
               つぶやき : <br>
-              <textarea name="tweet" cols="50" rows="2">ほげほげほげ</textarea>
+              <textarea name="tweet" cols="50" rows="2"><?php echo h($tweet['tweet']); ?></textarea>
             </p>
             <p class="day">
-              2016/01/01 00:00:00
+              <?php echo h($tweet['created']); ?>
               <input type="submit" value="編集">
               [<a href="#" style="color: #F33;">削除</a>]
             </p>
           </form>
         </div>
+      <?php else: ?>
+        <p>そのページは存在しないかURLが間違っています。</p>
+      <?php endif; ?>
         <a href="index.php">&laquo;&nbsp;一覧へ戻る</a>
-        <p>そのページは存在しないかURLが間違っています。
       </div>
     </div>
   </div>

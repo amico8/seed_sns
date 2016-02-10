@@ -193,7 +193,7 @@ if (isset($_REQUEST['res'])) {
               <a href="view.php?tweet_id=<?php echo h($tweet['reply_tweet_id']); ?>"> | 返信元のつぶやき</a>
             <?php endif; ?>
             <?php if($tweet['member_id'] == $_SESSION['member_id']): ?>
-            [<a href="#" style="color: #00994C;">編集</a>]
+            [<a href="edit.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>" style="color: #00994C;">編集</a>]
           <?php endif; ?>
             <?php if($member['member_id'] == $tweet['member_id']): ?>
             [<a href="delete.php?tweet_id=<?php echo h($tweet['tweet_id']); ?>" style="color: #F33;">削除</a>]
