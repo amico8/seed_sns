@@ -159,23 +159,31 @@ if (isset($_REQUEST['res'])) {
             </div>
           <ul class="paging">
             <input type="submit" class="btn btn-info" value="つぶやく">
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <?php if($page > 1): ?>
-                  <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
-                <?php else: ?>
-                  <li>前</li>
-                <?php endif; ?>
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-                <?php if($page < $maxPage): ?>
-                  <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
-                <?php else: ?>
-                  <li>次</li>
-                <?php endif; ?>
           </ul>
         </form>
       </div>
 
       <div class="col-md-8 content-margin-top">
+      <form method="get" action="" class="form-horizontal" role="form">
+        <?php if(isset($_GET['search_word']) && !empty($_GET['search_word'])): ?>
+          <input type="text" name="search_word" value="<?php echo h($_GET['search_word']); ?>">
+        <?php else: ?>
+          <input type="text" name="search_word" value="">
+        <?php endif; ?>
+        <input type="submit" class="btn btn-success btn-xs" value="検索">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($page > 1): ?>
+          <li><a href="index.php?page=<?php print($page-1); ?>" class="btn btn-default">前</a></li>
+        <?php else: ?>
+          <li>前</li>
+        <?php endif; ?>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <?php if($page < $maxPage): ?>
+          <li><a href="index.php?page=<?php print($page+1); ?>" class="btn btn-default">次</a></li>
+        <?php else: ?>
+          <li>次</li>
+        <?php endif; ?>
+      </form>
         <!-- ここでつぶやいた内容を繰り返し表示する -->
         <?php while ($tweet = mysqli_fetch_assoc($tweets)): ?>
         <div class="msg">
