@@ -63,7 +63,7 @@ if($page == ''){
 $page = max($page, 1);
 
 // あいまい検索処理
-if (isset($_GET['search_word']) && !empty($_GET['search_wrod'])) {
+if (isset($_GET['search_word']) && !empty($_GET['search_word'])) {
   $sql = sprintf('SELECT COUNT(*) AS cnt FROM `tweets` WHERE `tweet` LIKE "%%%s%%"',
     mysqli_real_escape_string($db, $_GET['search_word'])
   );
